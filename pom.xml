@@ -25,7 +25,7 @@
         <junit.version>4.11</junit.version>
 
         <camelspring.version>3.1.0</camelspring.version>
-        <spring.version>5.1.2.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
     </properties>
 
     <repositories>
