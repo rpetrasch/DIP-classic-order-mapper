@@ -5,11 +5,17 @@ import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.dataintegrationpatterns.mapping.*;
 import org.dataintegrationpatterns.model.edm.Producttype;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class OrderRouter extends RouteBuilder {
 
-    @Override
+    @Autowired
+    OrderItemAggregationStrategy orderItemAggregationStrategy;
+
     public void configure() throws Exception {
 
         from("direct:processOrderList")
@@ -22,18 +28,18 @@ public class OrderRouter extends RouteBuilder {
                 .end();
 
         from("direct:processOrder")
-                .split(body().method("getItems"), new OrderItemAggregationStrategy())
+                .split(body().method("getItems"), orderItemAggregationStrategy)
                 .to("direct:processItem")
                 .end();
 
         from("direct:processItem")
                 .choice()
                     .when(body().method("getType").in(Producttype.getAllProductTypeNames()))
-                        .to("bean:itemService?method=processProduct")
+                        .to("bean:itemBean?method=processProduct")
                     .when(body().method("getType").isEqualTo("Service"))
-                        .to("bean:itemService?method=processService").
+                        .to("bean:itemBean?method=processService").
                     otherwise()
-                        .to("bean:itemService?method=processUnknownItem")
+                        .to("bean:itemBean?method=processUnknownItem")
                 .endChoice()
 ;
 

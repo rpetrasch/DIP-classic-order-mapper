@@ -1,6 +1,5 @@
 package org.dataintegrationpatterns.model.edm;
 
-import javax.measure.unit.NonSI;
 import javax.money.MonetaryAmount;
 
 public class Product extends ItemBase {

@@ -1,7 +1,12 @@
 package org.dataintegrationpatterns.model.erp;
 
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
+@NoArgsConstructor
 public class Order {
 
     private String id;

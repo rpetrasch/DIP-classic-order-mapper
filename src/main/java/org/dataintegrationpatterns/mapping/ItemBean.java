@@ -5,8 +5,11 @@ import org.dataintegrationpatterns.model.edm.*;
 import org.dataintegrationpatterns.model.erp.Item;
 import org.dataintegrationpatterns.repo.EDMRepo;
 import org.javamoney.moneta.Money;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 
+@Component("itemBean")
 public class ItemBean {
 
     public SalesOrderLineItem processProduct(Item item) throws ValidationException {
@@ -42,6 +45,7 @@ public class ItemBean {
         ItemBase edmItem = EDMRepo.INSTANCE.findItem(item.getName());
         Service service = null;
 
+        // ToDo what is happening here?
         if (edmItem == null) {
             Money unitPrice = Money.of(item.getPrice(), EDMRepo.INSTANCE.defaultCurrency);
             service = new Service(item.getId(), item.getName(), unitPrice, EDMRepo.INSTANCE.defaultServiceUnit);

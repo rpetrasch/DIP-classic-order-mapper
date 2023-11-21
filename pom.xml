@@ -1,145 +1,199 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>org.dataintegrationpatterns.samples</groupId>
     <artifactId>classic-order-mapper</artifactId>
     <version>1.0.0</version>
+    <name>DIP :: Examples</name>
+    <description>Data Integration Patterns Examples</description>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.apache.camel.springboot</groupId>
+        <artifactId>spring-boot</artifactId>
+        <version>4.2.0</version>
+    </parent>
 
     <properties>
         <!-- Generic properties -->
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.plugin.validation>verbose</maven.plugin.validation>
 
-        <!-- Spring -->
-        <spring-framework.version>5.1.2.RELEASE</spring-framework.version>
-
-        <!-- Hibernate / JPA -->
+        <spring-framework.version>6.1.0</spring-framework.version>
         <hibernate.version>5.0.10.Final</hibernate.version>
-
-        <!-- Logging -->
-        <logback.version>1.2.3</logback.version>
-        <slf4j.version>1.7.26</slf4j.version>
-
-        <!-- Test -->
-        <junit.version>4.11</junit.version>
-
-        <camelspring.version>3.1.0</camelspring.version>
+        <junit.version>5.10.1</junit.version>
+        <camel.version>4.2.0</camel.version>
         <spring.version>5.1.2.RELEASE</spring.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>mvnrepository</id>
-            <name>mvnrepository</name>
-            <url>http://www.mvnrepository.com</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>https://repo.maven.apache.org/maven2</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+     <dependencies>
+         <!-- https://mvnrepository.com/artifact/org.apache.camel.springboot/camel-spring-boot-starter -->
+<!--         <dependency>-->
+<!--             <groupId>org.apache.camel.springboot</groupId>-->
+<!--             <artifactId>camel-spring-boot-starter</artifactId>-->
+<!--             <version>${camel.version}</version>-->
+<!--         </dependency>-->
+         <dependency>
+             <groupId>org.apache.camel</groupId>
+             <artifactId>camel-spring</artifactId>
+             <version>${camel.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>org.apache.camel</groupId>
+             <artifactId>camel-core</artifactId>
+             <version>${camel.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>org.apache.camel</groupId>
+             <artifactId>camel-core-processor</artifactId>
+             <version>${camel.version}</version>
+         </dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>${camelspring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-            <version>${camelspring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <version>${camelspring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.javamoney</groupId>
-            <artifactId>moneta</artifactId>
-            <version>1.3</version>
-            <type>pom</type>
-        </dependency>
+             <!-- Camel BOM -->
+<!--         <dependency>-->
+<!--             <groupId>org.apache.camel</groupId>-->
+<!--             <artifactId>camel-spring-boot-dependencies</artifactId>-->
+<!--             <version>3.0.0-RC3</version>-->
+<!--             <type>pom</type>-->
+<!--             <scope>provided</scope>-->
+<!--         </dependency>-->
+<!--             <dependency>-->
+<!--                 <groupId>org.apache.camel.springboot</groupId>-->
+<!--                 <artifactId>camel-spring-boot-bom</artifactId>-->
+<!--                 <version>${project.version}</version>-->
+<!--                 <type>pom</type>-->
+<!--                 <scope>import</scope>-->
+<!--             </dependency>-->
+         <dependency>
+             <groupId>org.postgresql</groupId>
+             <artifactId>postgresql</artifactId>
+             <version>42.6.0</version>
+             <scope>runtime</scope>
+         </dependency>
+
+         <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok</artifactId>
+             <version>1.18.30</version>
+             <optional>true</optional>
+         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.javamoney</groupId>-->
+<!--            <artifactId>moneta</artifactId>-->
+<!--            <version>1.3</version>-->
+<!--            <type>pom</type>-->
+<!--        </dependency>-->
 
         <!-- Spring and Transactions -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring-framework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring-framework.version}</version>
-        </dependency>
-
-        <!-- Logging with SLF4J & LogBack -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
+         <dependency>
+             <groupId>org.apache.camel.springboot</groupId>
+             <artifactId>camel-spring-boot-starter</artifactId>
+             <version>${camel.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>org.apache.camel.springboot</groupId>
+             <artifactId>camel-endpointdsl-starter</artifactId>
+             <version>${camel.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter</artifactId>
+             <version>3.1.2</version>
+         </dependency>
+<!--         <dependency>-->
+<!--             <groupId>org.springframework</groupId>-->
+<!--             <artifactId>spring-core</artifactId>-->
+<!--             <version>${spring.version}</version>-->
+<!--         </dependency>-->
+<!--         <dependency>-->
+<!--             <groupId>org.springframework</groupId>-->
+<!--             <artifactId>spring-beans</artifactId>-->
+<!--             <version>${spring.version}</version>-->
+<!--         </dependency>-->
+<!--         <dependency>-->
+<!--             <groupId>org.springframework</groupId>-->
+<!--             <artifactId>spring-context</artifactId>-->
+<!--             <version>${spring.version}</version>-->
+<!--         </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-context</artifactId>-->
+<!--            <version>${spring.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-tx</artifactId>-->
+<!--            <version>${spring.version}</version>-->
+<!--        </dependency>-->
 
         <!-- Test Artifacts -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring-framework.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.measure</groupId>
-            <artifactId>jsr-275</artifactId>
-            <version>0.9.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-test</artifactId>-->
+<!--            <version>${spring.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-test</artifactId>
+             <version>3.1.5</version>
+             <scope>test</scope>
+         </dependency>
+<!--         <dependency>-->
+<!--             <groupId>org.junit.jupiter</groupId>-->
+<!--             <artifactId>junit-jupiter-api</artifactId>-->
+<!--             <version>5.10.1</version>-->
+<!--             <scope>test</scope>-->
+<!--         </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>javax.measure</groupId>-->
+<!--            <artifactId>jsr-275</artifactId>-->
+<!--            <version>0.9.1</version>-->
+<!--        </dependency>-->
 
-    </dependencies>
+         <dependency>
+             <groupId>org.apache.camel</groupId>
+             <artifactId>camel-test-spring-junit5</artifactId>
+             <version>${camel.version}</version>
+             <scope>test</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.javamoney.moneta</groupId>
+             <artifactId>moneta-core</artifactId>
+             <version>1.3</version>
+         </dependency>
+
+     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.11.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+<!--                    <source>21</source>-->
+<!--                    <target>21</target>-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-report-maven-plugin</artifactId>
+                <version>${camel-version}</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <includeTest>true</includeTest>
+                    <includeXml>true</includeXml>
+                    <ignoreLenientProperties>false</ignoreLenientProperties>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

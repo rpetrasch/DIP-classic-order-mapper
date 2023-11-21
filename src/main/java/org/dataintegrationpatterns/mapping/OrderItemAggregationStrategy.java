@@ -1,16 +1,27 @@
 package org.dataintegrationpatterns.mapping;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+
 import org.dataintegrationpatterns.model.edm.SalesOrder;
 import org.dataintegrationpatterns.model.edm.SalesOrderLineItem;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+@Component("orderItemAggregationStrategy")
+@Slf4j
 public class OrderItemAggregationStrategy implements AggregationStrategy {
 
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 
         SalesOrder currentOrder;
         SalesOrderLineItem lineItem = newExchange.getIn().getBody(SalesOrderLineItem.class);
+
+        if (lineItem == null) {
+            log.warn("No line item found in exchange: " + newExchange.getIn().toString());
+            return newExchange;
+        }
 
         if (oldExchange == null) {
             currentOrder = newExchange.getIn().getHeader("order", SalesOrder.class);

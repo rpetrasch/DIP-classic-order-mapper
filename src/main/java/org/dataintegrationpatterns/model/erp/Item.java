@@ -1,6 +1,14 @@
 package org.dataintegrationpatterns.model.erp;
 
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@NoArgsConstructor
 public class Item {
+
+    public Item(String id) {
+        this.id = id;
+    }
 
     public Item(String id, String name, String type, Float price, Float qty) {
         this.id = id;
